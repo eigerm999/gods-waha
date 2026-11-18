@@ -6,7 +6,9 @@
 #
 services:
   waha:
-    image: ${WAHA_IMAGE:-devlikeapro/waha}
+    # :gows has no browser inside (3.2 GB vs 4.2 GB for :latest on x86),
+    # which matters on a 10 GB droplet.
+    image: ${WAHA_IMAGE:-devlikeapro/waha:gows}
     restart: unless-stopped
     env_file: .env
     environment:
