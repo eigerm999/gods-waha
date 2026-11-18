@@ -1,0 +1,30 @@
+# Production WAHA (e.g. a DigitalOcean droplet), behind Caddy for HTTPS.
+# WAHA publishes no ports itself; only Caddy on 80/443 is reachable.
+#
+#   cd ~/waha
+#   docker compose -f compose.prod.yml up -d
+#
+services:
+  waha:
+    image: ${WAHA_IMAGE:-devlikeapro/waha}
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./sessions:/app/.sessions
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    environment:
+      WAHA_DOMAIN: ${WAHA_DOMAIN:?Set WAHA_DOMAIN in .env, e.g. waha.yourdomain.com}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+    depends_on:
+      - waha
+
+volumes:
+  caddy_data:

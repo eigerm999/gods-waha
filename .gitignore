@@ -1,0 +1,3 @@
+# Secrets (API key, dashboard password) and the linked WhatsApp login.
+.env
+sessions/

@@ -1,0 +1,25 @@
+# Local WAHA for development.
+# Joins the local Laravel Docker network so Laravel can reach it at http://waha:3000.
+#
+#   cd ~/code/waha
+#   docker compose -f compose.local.yml up -d
+#
+services:
+  waha:
+    image: ${WAHA_IMAGE:-devlikeapro/waha}
+    container_name: waha
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./sessions:/app/.sessions
+    ports:
+      # Dashboard on this Mac only: http://127.0.0.1:3010/dashboard/
+      # (Laravel inside Docker still uses http://waha:3000.)
+      - "127.0.0.1:${WAHA_LOCAL_PORT:-3010}:3000"
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    external: true
+    name: ${LARAVEL_NETWORK:-code_laravel}
