@@ -15,6 +15,11 @@ services:
       # GOWS needs no browser, so it fits a 512 MB droplet. WEBJS (Chromium)
       # uses ~850 MB for one session. Overrides the value in .env.
       WHATSAPP_DEFAULT_ENGINE: ${WAHA_ENGINE:-GOWS}
+      # The Laravel admin links the number (QR) and sends messages through the
+      # API, so the public dashboard and Swagger UI are off. To use them
+      # temporarily, set WAHA_UI=True in .env and recreate the container.
+      WAHA_DASHBOARD_ENABLED: ${WAHA_UI:-False}
+      WHATSAPP_SWAGGER_ENABLED: ${WAHA_UI:-False}
     volumes:
       - ./sessions:/app/.sessions
 
