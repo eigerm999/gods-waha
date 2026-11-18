@@ -9,6 +9,10 @@ services:
     image: ${WAHA_IMAGE:-devlikeapro/waha}
     restart: unless-stopped
     env_file: .env
+    environment:
+      # GOWS needs no browser, so it fits a 512 MB droplet. WEBJS (Chromium)
+      # uses ~850 MB for one session. Overrides the value in .env.
+      WHATSAPP_DEFAULT_ENGINE: ${WAHA_ENGINE:-GOWS}
     volumes:
       - ./sessions:/app/.sessions
 

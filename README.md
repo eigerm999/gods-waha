@@ -36,6 +36,16 @@ docker compose -f compose.prod.yml up -d
 ufw allow OpenSSH && ufw allow 80 && ufw allow 443 && ufw --force enable
 ```
 
+On the $4 droplet (512 MB RAM), add swap once as a buffer:
+
+```bash
+fallocate -l 1G /swapfile && chmod 600 /swapfile && mkswap /swapfile && swapon /swapfile
+echo '/swapfile none swap sw 0 0' >> /etc/fstab
+```
+
+- Production uses the **GOWS** engine (set in `compose.prod.yml`), which needs no
+  browser. Local stays on WEBJS from `.env`.
+
 - Caddy gets the HTTPS certificate automatically. WAHA itself is not exposed.
 - Admin settings: **WAHA Server URL** `https://waha.yourdomain.com`, **API Key** = `WAHA_API_KEY` from the droplet's `.env`.
 
